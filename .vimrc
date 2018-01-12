@@ -1,6 +1,19 @@
 execute pathogen#infect()
-set backspace=indent,eol,start
+" set backspace=indent,eol,start
 " set clipboard=unnamed
+
+set nocompatible
+"jset runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+"j
+"jif dein#load_state('~/.vim/dein/')
+"j  call dein#begin('~/.vim/dein/')
+"j  call dein#add('~/.vim/dein/repos/github.com/Shougo/dein.vim')
+"j  call dein#add('Shougo/deoplete.nvim')
+"j  call dein#add('elixir-lang/vim-elixir')
+"j  call dein#local('~/.vim/bundle')
+"j  call dein#end()
+"j  call dein#save_state()
+"jendif
 
 " http://damien.lespiau.name/blog/2009/03/18/per-project-vimrc/
 set exrc " enable per-directory .vimrc files
@@ -12,7 +25,7 @@ filetype plugin indent on
 " set background=dark
 " colorscheme solarized
 set runtimepath^=~/.vim/bundle/ctrlp.vim
-set runtimepath^=~/.vim/bundle/treetop.vim
+" set runtimepath^=~/.vim/bundle/treetop.vim
 set runtimepath^=~/.vim/bundle/colorv.vim
 
 
@@ -26,11 +39,8 @@ set autoindent
 set ruler
 set showcmd
 set incsearch
-
 set laststatus=2
-
 set t_Co=256
-
 set number
 
 colorscheme molokai
@@ -75,9 +85,10 @@ noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
+noremap <C-C> :w !pbcopy<CR><CR>
+
 set hlsearch
 
-set nocompatible
 runtime macros/matchit.vim
 
 exe 'syn keyword rubyKeyword let'
@@ -114,3 +125,39 @@ let g:ctrlp_user_command = 'ag %s --nocolor --smart-case --nogroup --hidden
       \ -g ""'
 let g:jsx_ext_required = 0
 
+let g:vim_json_syntax_conceal = 0
+
+function! DoPrettyXML()
+  " save the filetype so we can restore it later
+  let l:origft = &ft
+  set ft=
+  " delete the xml header if it exists. This will
+  " permit us to surround the document with fake tags
+  " without creating invalid xml.
+  1s/<?xml .*?>//e
+  " insert fake tags around the entire document.
+  " This will permit us to pretty-format excerpts of
+  " XML that may contain multiple top-level elements.
+  0put ='<PrettyXML>'
+  $put ='</PrettyXML>'
+  silent %!xmllint --format -
+  " xmllint will insert an <?xml?> header. it's easy enough to delete
+  " if you don't want it.
+  " delete the fake tags
+  2d
+  $d
+  " restore the 'normal' indentation, which is one extra level
+  " too deep due to the extra tags we wrapped around the document.
+  silent %<
+  " back to home
+  1
+  " restore the filetype
+  exe "set ft=" . l:origft
+endfunction
+command! PrettyXML call DoPrettyXML()
+
+let g:ruby_indent_assignment_style = 'variable'
+let g:airline_powerline_fonts = 1
+let g:deoplete#enable_at_startup = 1
+
+let g:airline#extensions#wordcount#enabled = 0
