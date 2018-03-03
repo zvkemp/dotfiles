@@ -1,0 +1,36 @@
+[user]
+    name = zvkemp
+    email = zvkemp@gmail.com
+[core]
+    autocrlf = false
+    safecrlf = false
+    editor = vim
+    excludesfile = .DS_Store
+[push]
+    default = current
+[alias]
+    co = checkout
+    ci = commit
+    st = status
+    br = branch
+    pm = push -u origin master
+    pa = push -u origin --all
+    hist = log --pretty=format:\"%h %ad | %d  %s [%an]\" --graph --date=short
+    type = cat-file -t
+    dump = cat-file -p
+    lg = log --graph --all --pretty=format:'%Cred%h%Creset %C(cyan)%an%Creset - %C(cyan bold reverse)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+    lg1 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)?^?^? %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --dat$
+    lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)?^$
+[color]
+    ui = auto
+    showbranch = auto
+[color "branch"]
+    current = cyan black bold
+    local = yellow
+    remote = magenta
+[color "diff"]
+    meta       = yellow
+    frag       = magenta
+    old        = red reverse bold
+    new        = green reverse bold
+    whitespace = white reverse
